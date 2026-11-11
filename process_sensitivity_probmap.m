@@ -17,18 +17,18 @@ sFiles = vargin
 if length(sFiles)<2;
     error("Requires more than one sensitivity map.")
 end
-surf1 = in_bst_channel(sFiles{1}).SurfaceFile;
+surf1 = in_bst_results(sFiles{1}).SurfaceFile;
 for i = 1:(length(sFiles))
-    surf2 = in_bst_channel(sFiles{i}).SurfaceFile;
+    surf2 = in_bst_results(sFiles{i}).SurfaceFile;
     if (surf1~=surf2)
         error("Surface files not the same.")
     end
 end
 
 % Binarize and sum sensitivities across maps
-sTotalAmp = zeros(length(in_bst_channel(sFiles{1}).ImageGridAmp), 1);
+sTotalAmp = zeros(length(in_bst_results(sFiles{1}).ImageGridAmp), 1);
 for i = 1:length(sFiles)
-    sAmp = in_bst_channel(sFiles{i}).ImageGridAmp;
+    sAmp = in_bst_results(sFiles{i}).ImageGridAmp;
     sAmp(sAmp~=0)=1;
     sTotalAmp = sTotalAmp + sAmp;
 end
@@ -37,7 +37,7 @@ end
 sTotalAmp = sTotalAmp/max(sTotalAmp)
 
 % Save as map
-sOutput = in_bst_channel(sFiles{1});
+sOutput = in_bst_results(sFiles{1});
 sOutput.ImageGridAmp = sTotalAmp;
 sOutput.Comment = 'Group Spatial Coverage Probability Map';
 vargout = sOutput;
